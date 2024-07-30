@@ -69,7 +69,40 @@ resource "aws_security_group" "webSG"  {
 
 resource "aws_key_pair" "demo_key_pair" {
   key_name = "demo_key_pair"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = file("~/.ssh/public_key.pub")
+}
+
+resource "aws_instance" "server" {
+  ami = "ami-05b5693ff73bc6f84"
+  instance_type = "t3.micro"
+  key_name = aws_key_pair.demo_key_pair
+  vpc_security_group_ids = [aws_security_group.webSG.id]
+  subnet_id = aws_subnet.sub1.id
+
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = file("~/.ssh/public_key")
+      host = self.public_ip
+    }
+
+#File provision to copy a file from Local to Remote
+provisioner "file" {
+  source = "app.py"
+  destination = "/home/ubuntu/app.py" 
+}
+
+provisioner "remote-exec" {
+  inline = [ 
+    "echo 'Hello from the remote instance",
+    "sudo apt update -y",  #update packages of Ubuntu
+    "sudo apt-get install -y python3-pip", #Phython package installation
+    "cd /home/ubuntu/",
+    "sudo pip3 install flask",
+    "sudo python3 app.py &"
+   ]
+}
+
 }
 
 
