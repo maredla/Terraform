@@ -1,3 +1,7 @@
+variable "cidr" {
+  default = "10.0.0.0/16" 
+}
+
 resource "aws_vpc" "terraform_vpc" {
   cidr_block = var.cidr
 }
