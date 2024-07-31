@@ -3,11 +3,11 @@ provider "aws" {
 }
 
 variable "ami" {
-  description = "Instance AMI value"
+  description = "this is the AMI value for the instance"
 }
 
 variable "instance_type" {
-  description = "Instance type of EC2"
+  description = "this is the instance type for the EC2 instance"
 }
 
 resource "aws_instance" "example" {
