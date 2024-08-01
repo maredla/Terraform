@@ -1,4 +1,4 @@
 #Define the AWS provider Configuration
-provider "AWS" {
+provider "aws" {
     region = "ap-south-2"
 }
